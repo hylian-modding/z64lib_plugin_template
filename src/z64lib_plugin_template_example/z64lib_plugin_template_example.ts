@@ -60,17 +60,25 @@ class z64lib_plugin_template_example implements IPlugin {
     }
 
     private OOT() {
-        if (this.core.OOT!.helper.isPaused()) console.log("Game is paused!"); //Example use of helper to decide when to run code under specific conditions
+        if (this.core.OOT!.helper.isTitleScreen() || !this.core.OOT!.helper.isSceneNumberValid()) return; //Example use of helper to decide when to run code under specific conditions
+        if (this.core.OOT!.helper.isPaused() && !this.isTriggered) {
+            this.isTriggered = true;
+            console.log("Game paused!");
+        }
+        else if (this.isTriggered && !this.core.OOT!.helper.isPaused()) {
+            console.log("Game unpaused!");
+            this.isTriggered = false;
+        }
     }
 
     private MM() {
         if (this.core.MM!.helper.isTitleScreen() || !this.core.MM!.helper.isInterfaceShown()) return; //Example use of helper to decide when to run code under specific conditions
-            if (this.core.MM!.global.scene_framecount % (20 * this.seconds) === 0 && !this.isTriggered) { //Example of code running every X amount of seconds you're in a scene (10 seconds) 
-                this.counter = (this.core.MM!.global.scene_framecount / 20) // Amount of seconds elapsed so far
-                this.isTriggered = true;
-                console.log(`Been in scene ${this.core.MM!.global.scene} for ${this.counter} seconds!`);
-            }
-            else this.isTriggered = false;
+        if (this.core.MM!.global.scene_framecount % (20 * this.seconds) === 0 && !this.isTriggered) { //Example of code running every X amount of seconds you're in a scene (10 seconds) 
+            this.counter = (this.core.MM!.global.scene_framecount / 20) // Amount of seconds elapsed so far
+            this.isTriggered = true;
+            console.log(`Been in scene ${this.core.MM!.global.scene} for ${this.counter} seconds!`);
+        }
+        else this.isTriggered = false;
     }
 
     @onPostTick() // Runs after every in-game frame (after onTick)
