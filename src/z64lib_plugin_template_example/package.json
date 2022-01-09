@@ -1,0 +1,16 @@
+{
+  "name": "z64lib_plugin_template_example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "z64lib_plugin_template_example.js",
+  "author": "ModLoader64",
+  "credits": "",
+  "license": "GPL-3.0",
+  "core": [
+    "Z64Lib"
+  ],
+  "dependencies": {},
+  "modloader64_deps": {
+    "Z64Lib": "https://github.com/hylian-modding/ML64-Z64Lib.git"
+  }
+}
