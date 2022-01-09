@@ -34,7 +34,7 @@ in your root directory. After setting your ROM and other details correctly in th
 the next time you run it should be ready for use.
 
 ## Examples
-[You can find a really basic example of a plugin here](https://github.com/hylian-modding/z64lib_plugin_template/z64lib_plugin_template_example). 
+[You can find a really basic example of a plugin here](https://github.com/hylian-modding/z64lib_plugin_template/tree/main/src/z64lib_plugin_template_example). 
 Hopefully it should explain how a plugin works on a basic level.
 If you have any questions regarding developing a plugin and could use some help
 with some of ML64's features, feel free to reach out in our discord's #sdk-help channel. 
