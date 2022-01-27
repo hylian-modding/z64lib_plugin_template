@@ -13,8 +13,9 @@ class z64lib_plugin_template_example implements IPlugin {
     @InjectCore()
     core!: IZ64Main; //Object for Z64 game data
     game!: Z64LibSupportedGames; //Loaded Game
-    isOoT: Boolean = false; //Game Flags
-    isMM: Boolean = false;
+    isOoT: boolean = false; //Game Flags
+    isOoTDebug: boolean = false;
+    isMM: boolean = false;
     seconds: number = 10; //For calculating scene timer update
     rupeeInput: string_ref = [""]; //ImGui variable for rupee input
     counter: number = 0; //Counter for timer display
@@ -24,24 +25,22 @@ class z64lib_plugin_template_example implements IPlugin {
         this.isOoT = true;
     }
 
+    private Init_OOTDEBUG() { //Setup for OoT specific data
+        this.isOoTDebug = true;
+    }
+
     private Init_MM() { //Setup for MM specific data
         this.isMM = true;
     }
 
     @Preinit() // Runs once immediately before the emulator is initialized
-    preinit(): void { }
-
-    @Init() // Runs once immediately when the emulator is initializing
-    init(): void {
-        this.game = Z64_GAME;
-    }
-
-    @Postinit() // Runs once immediately after emulator is initialized
-    postinit(): void {
-        console.log(`Game loaded: ${this.game}.`);
-        switch (this.game) { //Decide what mod data to initialize based on loaded Z64 Game
+    preinit(): void {
+        switch (Z64_GAME) { //Decide what mod data to initialize based on loaded Z64 Game
             case Z64LibSupportedGames.OCARINA_OF_TIME:
                 this.Init_OOT();
+                break;
+            case Z64LibSupportedGames.DEBUG_OF_TIME:
+                this.Init_OOTDEBUG();
                 break;
             case Z64LibSupportedGames.MAJORAS_MASK:
                 this.Init_MM();
@@ -49,15 +48,29 @@ class z64lib_plugin_template_example implements IPlugin {
         }
     }
 
+    @Init() // Runs once immediately when the emulator is initializing
+    init(): void {
+    }
+
+    @Postinit() // Runs once immediately after emulator is initialized
+    postinit(): void {
+    }
+
     @onTick() // Runs every in-game frame after postinit()
     onTick(): void {
         if (this.isOoT) {
             this.OOT(); //Runs OoT's function every frame
         }
+        else if (this.isOoTDebug) {
+            this.OOTDEBUG() // Runs OoTDebug's function every frame
+        }
         else if (this.isMM) {
             this.MM(); //Runs MM's function every frame
         }
     }
+
+    @onPostTick() // Runs after every in-game frame (after onTick)
+    onPostTick() { }
 
     private OOT() {
         if (this.core.OOT!.helper.isTitleScreen() || !this.core.OOT!.helper.isSceneNumberValid()) return; //Example use of helper to decide when to run code under specific conditions
@@ -71,6 +84,9 @@ class z64lib_plugin_template_example implements IPlugin {
         }
     }
 
+    private OOTDEBUG() {
+    }
+    
     private MM() {
         if (this.core.MM!.helper.isTitleScreen() || !this.core.MM!.helper.isInterfaceShown()) return; //Example use of helper to decide when to run code under specific conditions
         if (this.core.MM!.global.scene_framecount % (20 * this.seconds) === 0 && !this.isTriggered) { //Example of code running every X amount of seconds you're in a scene (10 seconds) 
@@ -80,9 +96,6 @@ class z64lib_plugin_template_example implements IPlugin {
         }
         else this.isTriggered = false;
     }
-
-    @onPostTick() // Runs after every in-game frame (after onTick)
-    onPostTick() { }
 
     @onViUpdate() // Runs every vertical interupt update
     onViUpdate() {

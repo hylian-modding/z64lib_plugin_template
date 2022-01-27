@@ -16,8 +16,8 @@
       "@sound/*": [
         "./build/emulator/*"
       ],
-      "@z64lib_plugin_template/*": [
-        "./src/z64lib_plugin_template/*"
+      "@z64lib_plugin_template_example/*": [
+        "./src/z64lib_plugin_template_example/*"
       ]
     },
     "noImplicitAny": false
